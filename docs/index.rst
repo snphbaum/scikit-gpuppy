@@ -3,9 +3,9 @@
 	You can adapt this file completely to your liking, but it should at least
 	contain the root `toctree` directive.
 
-==================================================================
-scikit-GPUPPY: Gaussian Process Uncertainty Propagation for PYthon
-==================================================================
+===================================================================
+scikit-GPUPPY: Gaussian Process Uncertainty Propagation with PYthon
+===================================================================
 
 This package provides means for modeling functions and simulations using Gaussian processes (aka Kriging, Gaussian random fields, Gaussian random functions).
 Additionally, uncertainty can be propagated through the Gaussian processes.

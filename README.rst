@@ -1,9 +1,9 @@
-==================================================================
-scikit-GPUPPY: Gaussian Process Uncertainty Propagation for PYthon
-==================================================================
+===================================================================
+scikit-GPUPPY: Gaussian Process Uncertainty Propagation with PYthon
+===================================================================
 
-Copyright (C) 2015 Philipp Baumgaertel
-All rights reserved.
+| Copyright (C) 2015 Philipp Baumgaertel
+| All rights reserved.
 
 This software may be modified and distributed under the terms
 of the BSD license.  See the LICENSE.txt file for details.
@@ -23,7 +23,7 @@ Additionally, uncertainty can be propagated through the Gaussian processes.
 		The extension based on Snelson's work is already usable but not as fast as it should be.
 		Additionally, the uncertainty propagation does not yet work with this extension.
 
-	An additional extension for :doc:`iup` is based on my paper (and upcoming PhD thesis) [#]_.
+	An additional extension for Inverse Uncertainty Propagation is based on my paper (and upcoming PhD thesis) [#]_.
 
 A simulation is seen as a function :math:`f(x)+\epsilon` (:math:`x \in \mathbb{R}^n`) with additional random error :math:`\epsilon \sim \mathcal{N}(0,v)`.
 This optional error is due to the stochastic nature of most simulations.
@@ -65,6 +65,7 @@ Documentation
 Usage
 -----
 
+
 **Regression**
 
 ::
@@ -79,8 +80,14 @@ Usage
 	v = 2                       # GP variance parameter
 	vt = 0.01                   # GP variance of the error epsilon
 
+	# Preparing the parameter vector
+	theta = np.zeros(2+len(w))
+	theta[0] = np.log(v)  # We actually use the log of the parameters as it is easier to optimize (no > 0 constraint etc.)
+	theta[1] = np.log(vt)
+	theta[2:2+len(w)] = np.log(w)
+
 	# Simulating simulation data by drawing data from a random Gaussian process
-	t = GaussianProcess.get_realisation(x, v, vt, w)
+	t = GaussianProcess.get_realisation(x, GaussianCovariance(),theta)
 
 	# The regression step is pretty easy:
 	# Input data x (list of input vectors)
@@ -145,7 +152,7 @@ Usage
 	# The desired output variance (in this example) is out_variance
 	# Getting the Sigma that leads to the minimal data collection costs while still yielding out_variance
 	# If multiple parameters from the same distribution (and therefore the same sample) have to be estimated, we could use the optional parameter "coestimated"
-	iup = InverseUncertaintyPropagationApprox([out_variance],[gp_est],mean,c,I)
+	iup = InverseUncertaintyPropagationApprox(out_variance,gp_est,mean,c,I)
 	Sigma_opt = np.diag(iup.get_best_solution())
 
 	# The optimal data collection cost to get the output variance out_variance

@@ -46,7 +46,7 @@ Additionally, uncertainty can be propagated through the Gaussian processes.
 		The extension based on Snelson's work is already usable but not as fast as it should be.
 		Additionally, the uncertainty propagation does not yet work with this extension.
 
-	An additional extension for :doc:`iup` is based on my paper (and upcoming PhD thesis) [#]_.
+	An additional extension for Inverse Uncertainty Propagation is based on my paper (and upcoming PhD thesis) [#]_.
 
 A simulation is seen as a function :math:`f(x)+\epsilon` (:math:`x \in \mathbb{R}^n`) with additional random error :math:`\epsilon \sim \mathcal{N}(0,v)`.
 This optional error is due to the stochastic nature of most simulations.
