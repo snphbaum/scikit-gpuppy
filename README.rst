@@ -50,6 +50,7 @@ Requirements
 
 * scipy
 * numpy
+* weave
 * statsmodels
 * nose
 

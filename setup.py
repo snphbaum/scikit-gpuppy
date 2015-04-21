@@ -7,9 +7,9 @@
 from setuptools import setup, find_packages
 setup(
 	name = "scikit-gpuppy",
-	version = "0.0.1",
+	version = "0.9.0",
 	packages = find_packages(),
-	install_requires = ['scipy>=0.13.3', 'numpy>=1.8.2', 'statsmodels>=0.6.1','nose>=1.3.4'],
+	install_requires = ['scipy>=0.13.3', 'numpy>=1.8.2', 'statsmodels>=0.6.1','nose>=1.3.4','weave'],
 	package_data = {
 		# If any package contains *.txt or *.rst files, include them:
 		'': ['*.txt', '*.rst','*.pkl'],
@@ -18,8 +18,8 @@ setup(
 	author_email = "philipp.baumgaertel@fau.de",
 	description = "Gaussian Process Uncertainty Propagation with PYthon",
 	license = "BSD",
-	keywords = "gaussian process kriging random field uncertainty propagation",
-	url = "http://example.com/HelloWorld/",   # project home page, if any
+	keywords = "gaussian process kriging random field simulation uncertainty propagation",
+	url = "https://github.com/snphbaum/scikit-gpuppy",   # project home page, if any
 	test_suite = 'nose.collector',
 	classifiers = [
 		"Programming Language :: Python",
