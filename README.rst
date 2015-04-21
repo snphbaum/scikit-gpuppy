@@ -62,6 +62,11 @@ Testing
 
 Documentation
 -------------
+
+https://pythonhosted.org/scikit-gpuppy/
+
+or
+
 ``python setup.py build_sphinx``
 
 Installation
