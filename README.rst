@@ -8,6 +8,8 @@ scikit-GPUPPY: Gaussian Process Uncertainty Propagation with PYthon
 This software may be modified and distributed under the terms
 of the BSD license.  See the LICENSE.txt file for details.
 
+https://github.com/snphbaum/scikit-gpuppy
+
 Overview
 --------
 
@@ -62,6 +64,9 @@ Documentation
 -------------
 ``python setup.py build_sphinx``
 
+Installation
+------------
+``pip install scikit-gpuppy``
 
 Usage
 -----

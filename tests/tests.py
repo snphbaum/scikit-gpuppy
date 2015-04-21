@@ -1301,7 +1301,7 @@ class TestUncertaintyPropagationMETIS(unittest.TestCase):
 	def setUp(self):
 
 		# if not os.path.exists('tests/metis_gp.pkl'):
-		with open('skgpuppy/tests/metis_data.pkl', 'rb') as output:
+		with open('tests/metis_data.pkl', 'rb') as output:
 			(collection,x,t) = pickle.load(output)
 		self.gp_est = GaussianProcess(x, t,GaussianCovariance())
 		# 	with open('tests/metis_gp.pkl', 'wb') as output:
@@ -1318,8 +1318,8 @@ class TestUncertaintyPropagationMETIS(unittest.TestCase):
 	def test_propagation(self):
 
 		# Too large to ship the data for testing
-		if os.path.exists('skgpuppy/tests/metis_data_mc.pkl'):
-			with open('skgpuppy/tests/metis_data_mc.pkl', 'rb') as output:
+		if os.path.exists('tests/metis_data_mc.pkl'):
+			with open('tests/metis_data_mc.pkl', 'rb') as output:
 				(collection,x,t) = pickle.load(output)
 
 			n = t.size
