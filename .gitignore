@@ -49,6 +49,7 @@ grafiken/roh/*.pdf
 *.backup
 *Thumbs.db*
 
+dist
 cover
 build
 scikit_gpuppy.egg-info
