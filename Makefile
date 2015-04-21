@@ -71,6 +71,7 @@ clean:
 	rm -f skgpuppy/*.pyc
 	rm -rf cover
 	rm -rf build
+	rm -rf dist
 	rm -rf scikit_gpuppy.egg-info
 
 html:	apidoc
