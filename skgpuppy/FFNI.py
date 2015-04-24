@@ -5,11 +5,11 @@
 # of the BSD license.  See the LICENSE.txt file for details.
 
 
-from Utilities import integrate, mvnorm
+from .Utilities import integrate, mvnorm
 import numpy as np
-from Utilities import integrate_hermgauss_nd, cache_wrapper
+from .Utilities import integrate_hermgauss_nd, cache_wrapper
 
-class PropagateMoments:
+class PropagateMoments(object):
 	"""
 	Superclass for uncertainty propagation through deterministic functions
 	"""
@@ -45,7 +45,7 @@ class PropagateMoments:
 
 		mean = self._exn(1,Sigma_x)
 		ex2 = self._exn(2,Sigma_x)
-		print "Function calls: ", self.func.calls
+		print("Function calls: ", self.func.calls)
 		# import matplotlib.pyplot as plt
 		# xs = np.array(self.func.cache.keys())
 		# plt.scatter(xs.T[0],xs.T[1])

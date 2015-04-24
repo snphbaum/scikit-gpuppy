@@ -21,7 +21,7 @@ from skgpuppy.InverseUncertaintyPropagation import InverseUncertaintyPropagation
 from skgpuppy.PDF import Normal, Skew_Normal
 from functools import wraps
 import scipy
-
+import sys
 
 class TestPDF(unittest.TestCase):
 	def test_skew_pdf(self):
@@ -45,7 +45,7 @@ class TestPDF(unittest.TestCase):
 		sresult = s.output_pdf(1,1,0,0,[1,2,3])
 		nresult = n.output_pdf(1,1,0,0,[1,2,3])
 
-		for i in xrange(3):
+		for i in range(3):
 			self.assertAlmostEqual(sresult[i],nresult[i],delta=1e-10 )
 
 
@@ -76,10 +76,10 @@ class TestMLE(unittest.TestCase):
 				return 0
 
 		samples = []
-		for i in xrange(k):
+		for i in range(k):
 			samples.append([1])
 
-		for i in xrange(n - k):
+		for i in range(n - k):
 			samples.append([0])
 
 		p = float(k) / float(n)
@@ -147,8 +147,8 @@ class TestMLE(unittest.TestCase):
 		mle = MLE(density,[0,1],dims=1,fisher_matrix=fisher_matrix)
 		fisher = mle.get_fisher_function(order=1)
 
-		for i in xrange(2):
-			for j in xrange(2):
+		for i in range(2):
+			for j in range(2):
 				if i != j :
 					self.assertAlmostEqual(fisher([0.5,1],i,j),0,delta=0.015)
 
@@ -163,7 +163,7 @@ class TestMLE(unittest.TestCase):
 		f_mu2 = [1/x_i**2 for x_i in sigma]
 		f_sigma2 = [2/(x_i**2) for x_i in sigma]
 
-		for i in xrange(points):
+		for i in range(points):
 			self.assertAlmostEqual(f_mu[i],f_mu2[i],delta=f_mu2[i]*1e-3)
 			self.assertAlmostEqual(f_sigma[i],f_sigma2[i],delta=f_sigma2[i]*1e-3)
 
@@ -174,8 +174,8 @@ class TestMLE(unittest.TestCase):
 		mle = MLE(density,[0,1],dims=1)#,support=[(-4,4)])
 		fisher = mle.get_fisher_function(order=1)
 
-		for i in xrange(2):
-			for j in xrange(2):
+		for i in range(2):
+			for j in range(2):
 #				print i,", ",j
 #				print fisher([0,1],i,j)
 				if i != j :
@@ -207,7 +207,7 @@ class TestMLE(unittest.TestCase):
 #		plt.title('Fisher Information')
 #		plt.show()
 
-		for i in xrange(points):
+		for i in range(points):
 			self.assertAlmostEqual(f_mu[i],f_mu2[i],delta=f_mu2[i]*1e-3)
 			self.assertAlmostEqual(f_sigma[i],f_sigma2[i],delta=f_sigma2[i]*1e-3)
 
@@ -232,10 +232,10 @@ class TestMLE(unittest.TestCase):
 		fisher = mle.get_fisher_function()
 		fisher_2nd = mle.get_fisher_function(order=2)
 
-		for i in xrange(2):
+		for i in range(2):
 
 			self.assertAlmostEqual(fisher([0.25,0.25],i), fisher_2nd([0.25,0.25],i), delta=1e-3)
-			for j in xrange(2):
+			for j in range(2):
 				if i != j :
 					self.assertAlmostEqual(fisher([0.25,0.25],i,j),0,1e-5)
 
@@ -257,7 +257,7 @@ class TestInverseUP(unittest.TestCase):
 		# if not os.path.exists('tests/gp_2d.pkl'):
 			#Because it takes too long: pickle a gp
 
-		x = np.array([[x1,x2] for x1 in xrange(10) for x2 in xrange(10)])  #np.atleast_2d(np.linspace(0, 10, 30)).T
+		x = np.array([[x1,x2] for x1 in range(10) for x2 in range(10)])  #np.atleast_2d(np.linspace(0, 10, 30)).T
 		w = np.array([0.04,0.04])
 		v = 2
 		vt = 0#.01
@@ -279,7 +279,7 @@ class TestInverseUP(unittest.TestCase):
 		means, variances = self.gp_est.estimate_many(x)
 		sigma = np.sqrt(variances)
 
-		for i in xrange(len(x)):
+		for i in range(len(x)):
 			self.assertAlmostEqual(means[i], y[i], delta=4 * sigma[i])
 
 		# 	output = open('tests/gp_2d.pkl', 'wb')
@@ -309,32 +309,32 @@ class TestInverseUP(unittest.TestCase):
 		start = time.time()
 		meanL, varianceL = upl.propagate_GA(inputmean, inputvariance)
 		end = time.time()
-		print "Linear ", end - start
+		print("Linear ", end - start)
 
 		start = time.time()
 		meanE, varianceE = upe.propagate_GA(inputmean, inputvariance)
 		end = time.time()
-		print "Exact ", end - start
+		print("Exact ", end - start)
 
 		start = time.time()
 		meanN, varianceN = upn.propagate_GA(inputmean, inputvariance)
 		end = time.time()
-		print "Numerical ", end - start
+		print("Numerical ", end - start)
 
 		start = time.time()
 		meanH, varianceH = uph.propagate_GA(inputmean, inputvariance)
 		end = time.time()
-		print "Numerical HG", end - start
+		print("Numerical HG", end - start)
 
 		start = time.time()
 		meanA, varianceA = upa.propagate_GA(inputmean, inputvariance)
 		end = time.time()
-		print "Approx ", end - start
+		print("Approx ", end - start)
 
 
-		print meanH, meanN, meanE, meanL, meanA
-		print (varianceH),(varianceN), (varianceE), (varianceL), (varianceA)
-		print np.sqrt(varianceH),np.sqrt(varianceN), np.sqrt(varianceE), np.sqrt(varianceL), np.sqrt(varianceA)
+		print(meanH, meanN, meanE, meanL, meanA)
+		print((varianceH),(varianceN), (varianceE), (varianceL), (varianceA))
+		print(np.sqrt(varianceH),np.sqrt(varianceN), np.sqrt(varianceE), np.sqrt(varianceL), np.sqrt(varianceA))
 
 		self.assertAlmostEqual(meanE, meanA, delta=0.002)
 		self.assertAlmostEqual(meanH, meanE, delta=0.1)
@@ -359,28 +359,28 @@ class TestInverseUP(unittest.TestCase):
 		start = time.time()
 		sol_n = iupn.get_best_solution()
 		end = time.time()
-		print "Numerical ", end - start
+		print("Numerical ", end - start)
 
 		start = time.time()
 		sol_a = iupa.get_best_solution()
 		end = time.time()
-		print "Approx ", end - start
+		print("Approx ", end - start)
 
 		up = UncertaintyPropagationExact(self.gp_est)
 
 
-		print "Numerical, NA, Approx Solution"
-		print sol_n
+		print("Numerical, NA, Approx Solution")
+		print(sol_n)
 
-		print sol_a
-		print "Numerical, NA, Approx Variances"
-		print up.propagate_GA(u,np.diag(sol_n))[1]
+		print(sol_a)
+		print("Numerical, NA, Approx Variances")
+		print(up.propagate_GA(u,np.diag(sol_n))[1])
 
-		print up.propagate_GA(u,np.diag(sol_a))[1]
-		print "Numerical, NA, Approx Costs"
-		print c[0] * 1/sol_n[0] + c[1] * 1/sol_n[1]
+		print(up.propagate_GA(u,np.diag(sol_a))[1])
+		print("Numerical, NA, Approx Costs")
+		print(c[0] * 1/sol_n[0] + c[1] * 1/sol_n[1])
 
-		print c[0] * 1/sol_a[0] + c[1] * 1/sol_a[1]
+		print(c[0] * 1/sol_a[0] + c[1] * 1/sol_a[1])
 
 		self.assertAlmostEqual(sol_n[0],sol_a[0],delta=1e-2)
 		self.assertAlmostEqual(sol_n[1],sol_a[1],delta=1e-3)
@@ -493,7 +493,7 @@ class TestGaussianProcess(unittest.TestCase):
 
 		spgpc = SPGPCovariance(10)
 		gc = GaussianCovariance()
-		x = np.array([[x1,x2] for x1 in xrange(10) for x2 in xrange(10)])  #np.atleast_2d(np.linspace(0, 10, 30)).T
+		x = np.array([[x1,x2] for x1 in range(10) for x2 in range(10)])  #np.atleast_2d(np.linspace(0, 10, 30)).T
 		w = np.array([0.04,0.04])
 		v = 2
 		vt = 0#.01
@@ -531,7 +531,7 @@ class TestGaussianProcess(unittest.TestCase):
 			#dndt_est.append( (spgpc.negativeloglikelihood(x,t,theta+d) - spgpc.negativeloglikelihood(x,t,theta-d))/2/delta )
 			dndt_est.append( (Covariance._negativeloglikelihood(spgpc,x,t,theta+d) - Covariance._negativeloglikelihood(spgpc,x,t,theta-d))/2/delta )
 
-		print "TIME numerical: ",time.time() -start
+		print("TIME numerical: ",time.time() -start)
 
 		# j = 0
 		# d = np.zeros(len(theta))
@@ -544,14 +544,14 @@ class TestGaussianProcess(unittest.TestCase):
 
 		start = time.time()
 		dndt = Covariance._d_nll_d_theta(spgpc,x,t,theta)
-		print "TIME classic: ",time.time() -start
+		print("TIME classic: ",time.time() -start)
 
 		dot = Dot()
 		dot.reset()
 		start = time.time()
 		dndt = spgpc._d_nll_d_theta(x,t,theta)
-		print "TIME opt: ",time.time() -start
-		print dot
+		print("TIME opt: ",time.time() -start)
+		print(dot)
 
 		self.assertLessEqual(np.abs((dndt_est-dndt)).sum(),1e-4)
 		#self.assertLessEqual(np.abs((dndt_est-dndt_m)).sum(),1e-3)
@@ -578,7 +578,7 @@ class TestGaussianProcess(unittest.TestCase):
 	def test_covariance(self):
 		gc = GaussianCovariance()
 
-		x = np.array([[x1,x2] for x1 in xrange(10) for x2 in xrange(10)])  #np.atleast_2d(np.linspace(0, 10, 30)).T
+		x = np.array([[x1,x2] for x1 in range(10) for x2 in range(10)])  #np.atleast_2d(np.linspace(0, 10, 30)).T
 		theta = np.log(np.array([2,0.01,0.04,0.04]))
 
 		cov = gc.cov_matrix(x,theta)
@@ -595,7 +595,7 @@ class TestGaussianProcess(unittest.TestCase):
 		#t = y + 0.1 * np.random.randn(len(x)) #-> vt = 0.01
 
 		dndt = gc._d_nll_d_theta(x,t,theta)
-		print dndt
+		print(dndt)
 		dndt_est = []
 		for j in range(len(theta)):
 			d = np.zeros(len(theta))
@@ -605,8 +605,8 @@ class TestGaussianProcess(unittest.TestCase):
 
 
 		dndt_est = np.array(dndt_est)
-		print dndt_est
-		print np.abs(dndt_est - dndt)
+		print(dndt_est)
+		print(np.abs(dndt_est - dndt))
 		self.assertTrue((np.abs(dndt_est - dndt) < 5e-1).all())
 
 	def test_pickle(self):
@@ -628,8 +628,11 @@ class TestGaussianProcess(unittest.TestCase):
 		output.close()
 
 		pkl_file = open('gp.pkl', 'rb')
+		if sys.version_info.major == 3:
+			gp_unpickled = pickle.load(pkl_file, encoding='latin1')
+		else:
+			gp_unpickled = pickle.load(pkl_file)
 
-		gp_unpickled = pickle.load(pkl_file)
 		pkl_file.close()
 		os.remove('gp.pkl')
 		means, variances = gp_est.estimate_many(x)
@@ -637,7 +640,7 @@ class TestGaussianProcess(unittest.TestCase):
 		meansp, variancesp = gp_unpickled.estimate_many(x)
 		sigmap = np.sqrt(variancesp)
 
-		for i in xrange(len(x)):
+		for i in range(len(x)):
 			self.assertEqual(means[i], meansp[i])
 			self.assertEqual(sigma[i], sigmap[i])
 
@@ -660,16 +663,16 @@ class TestGaussianProcess(unittest.TestCase):
 		xt = np.atleast_2d(np.linspace(0, 10, 200)).T
 
 		gp_est = GaussianProcess(x, t,GaussianCovariance())
-		print "Theta:", np.exp(gp_est.theta_min[0:3])
+		print("Theta:", np.exp(gp_est.theta_min[0:3]))
 		means_gp, variances_gp = gp_est.estimate_many(xt)
 		sigma_gp = np.sqrt(variances_gp)
 
 		spgpcov = SPGPCovariance(n)
 		gp_est = GaussianProcess(x, t,spgpcov)
-		print "Theta:", np.exp(gp_est.theta_min[0:3])
+		print("Theta:", np.exp(gp_est.theta_min[0:3]))
 		means, variances = gp_est.estimate_many(xt)
 		theta_start = spgpcov.get_theta(x,t)
-		print "Thetastart:", np.exp(theta_start[0:3])
+		print("Thetastart:", np.exp(theta_start[0:3]))
 		#means = spgpcov.estimate(x,t,gp_est.theta_min,xt)
 
 		sigma = np.sqrt(variances)
@@ -684,13 +687,13 @@ class TestGaussianProcess(unittest.TestCase):
 		# plt.legend(['Realisation','Noisy','Estimation','EstimationGP'])
 		# plt.show()
 
-		for i in xrange(len(x)):
+		for i in range(len(x)):
 			self.assertAlmostEqual(means_gp[i*2], y[i], delta=4 * sigma[i*2])
 			self.assertAlmostEqual(means[i*2], y[i], delta=4 * sigma[i*2])
 
 	def test_gp_2D(self):
 
-		x = np.array([[x1,x2] for x1 in xrange(10) for x2 in xrange(10)])  #np.atleast_2d(np.linspace(0, 10, 30)).T
+		x = np.array([[x1,x2] for x1 in range(10) for x2 in range(10)])  #np.atleast_2d(np.linspace(0, 10, 30)).T
 		w = np.array([0.04,0.04])
 		v = 2
 		vt = 0#.01
@@ -726,7 +729,7 @@ class TestGaussianProcess(unittest.TestCase):
 		means, variances = gp_est.estimate_many(x)
 		sigma = np.sqrt(variances)
 
-		for i in xrange(len(x)):
+		for i in range(len(x)):
 			self.assertAlmostEqual(means[i], y[i], delta=5 * sigma[i])
 
 
@@ -751,7 +754,7 @@ class TestGaussianProcess(unittest.TestCase):
 	def test_spgp_nll(self):
 
 
-		x = np.array([[x1,x2] for x1 in xrange(10) for x2 in xrange(10)])  #np.atleast_2d(np.linspace(0, 10, 30)).T
+		x = np.array([[x1,x2] for x1 in range(10) for x2 in range(10)])  #np.atleast_2d(np.linspace(0, 10, 30)).T
 		w = np.array([0.04,0.04])
 		v = 2
 		vt = 0#.01
@@ -771,17 +774,17 @@ class TestGaussianProcess(unittest.TestCase):
 
 		start = time.time()
 		res_g = gc._negativeloglikelihood(x,t,theta_gc)
-		print "Gaussian NLL: ",res_g
-		print "Time: ",time.time()-start
+		print("Gaussian NLL: ",res_g)
+		print("Time: ",time.time()-start)
 
 		start = time.time()
 		res = Covariance._negativeloglikelihood(spgpcov,x,t,theta)
-		print "My NLL: ",res
-		print "Time: ",time.time()-start
+		print("My NLL: ",res)
+		print("Time: ",time.time()-start)
 
 		res_s =  spgpcov._negativeloglikelihood(x,t,theta)
-		print "Snelson NLL: ", res_s
-		print "Time: ", time.time()-start
+		print("Snelson NLL: ", res_s)
+		print("Time: ", time.time()-start)
 
 
 		self.assertAlmostEqual(res,res_s,delta=2e-1)
@@ -799,7 +802,7 @@ class TestTaylor(unittest.TestCase):
 			c2 = 0
 			c3 = 0
 			Sigma_x = np.eye(n)
-			for e in product(range(order+1),repeat=n):
+			for e in product(list(range(order+1)),repeat=n):
 				if sum(e) == order:
 					i = _Isserli(np.array(e),Sigma_x,diagonal=False)
 					if i != 0:
@@ -847,15 +850,15 @@ class TestTaylor(unittest.TestCase):
 		dims = 6
 		t = time.time()
 		p_lists = []
-		for e in product(range(order+1),repeat=dims):
+		for e in product(list(range(order+1)),repeat=dims):
 			# Very inefficient
 			if sum(e) == order:
 				p_lists.append(e)
-		print time.time()-t
+		print(time.time()-t)
 
 		t = time.time()
 		p_lists_2 = _get_powerlists(order,dims)
-		print time.time()-t
+		print(time.time()-t)
 
 		self.assertEqual(len(p_lists),len(p_lists_2))
 
@@ -866,7 +869,7 @@ class TestTaylor(unittest.TestCase):
 
 		#t = time.time()
 		p_lists = []
-		for e in product(range(order+1),repeat=dims):
+		for e in product(list(range(order+1)),repeat=dims):
 			# Very inefficient
 			if sum(e) <= order:
 				p_lists.append(e)
@@ -947,16 +950,16 @@ class TestTaylor(unittest.TestCase):
 		start = time.time()
 		vals = np.random.multivariate_normal(np.array([1,1]),Sigma_x,10**7).T
 		out = f(vals)
-		print time.time()-start
+		print(time.time()-start)
 
-		print out.mean(), out.std()
+		print(out.mean(), out.std())
 		#mean =  t.propagate_mean(Sigma_x)
 
 		start = time.time()
 		t = TaylorPropagation(f,[1,1],10,dx=1e-1)
 		mean,variance =  t.propagate(Sigma_x)
-		print time.time()-start
-		print mean, np.sqrt(variance)
+		print(time.time()-start)
+		print(mean, np.sqrt(variance))
 		self.assertAlmostEqual(out.mean(),mean,delta=1e-3)
 		self.assertAlmostEqual(out.std(),np.sqrt(variance),delta=1e-3)
 
@@ -1000,22 +1003,22 @@ class TestTaylor(unittest.TestCase):
 		start = time.time()
 		vals = np.random.multivariate_normal(np.array(mu),Sigma_x,10**7).T
 		out = f(vals)
-		print time.time()-start
+		print(time.time()-start)
 
 
-		print "Monte Carlo"
+		print("Monte Carlo")
 		from scipy.stats import skew, kurtosis
 		skewness_mc = skew(out)
 		kurtosis_mc = kurtosis(out,fisher=False)
-		print out.mean(), out.std(), skewness_mc, kurtosis_mc#, skewness_mc2, kurtosis_mc2
+		print(out.mean(), out.std(), skewness_mc, kurtosis_mc)#, skewness_mc2, kurtosis_mc2
 
-		print
-		print "Taylor"
+		print()
+		print("Taylor")
 		start = time.time()
 		t = TaylorPropagation(f,mu,5,dx=1e-1)
 		mean,variance,skewness,kurtosis =  t.propagate(Sigma_x,skew=True,kurtosis=True)
-		print time.time()-start
-		print mean, np.sqrt(variance),skewness, kurtosis
+		print(time.time()-start)
+		print(mean, np.sqrt(variance),skewness, kurtosis)
 
 
 		self.assertAlmostEqual(out.mean(),mean,delta=0.002)
@@ -1023,13 +1026,13 @@ class TestTaylor(unittest.TestCase):
 		self.assertAlmostEqual(skewness,skewness_mc,delta=1e-1)
 		self.assertAlmostEqual(kurtosis,kurtosis_mc,delta=0.5)
 
-		print
-		print "Evans"
+		print()
+		print("Evans")
 		start = time.time()
 		t = FullFactorialNumericalIntegrationEvans(f,np.array(mu))
 		mean,variance,skewness,kurtosis =  t.propagate(Sigma_x,skew=True,kurtosis=True)
-		print time.time()-start
-		print mean, np.sqrt(variance),skewness, kurtosis
+		print(time.time()-start)
+		print(mean, np.sqrt(variance),skewness, kurtosis)
 
 		#Evans is somehow awful
 		self.assertAlmostEqual(out.mean(),mean,delta=0.002)
@@ -1037,13 +1040,13 @@ class TestTaylor(unittest.TestCase):
 		#self.assertAlmostEqual(skewness,skewness_mc,delta=1e-1)
 		#self.assertAlmostEqual(kurtosis,kurtosis_mc,delta=0.5)
 
-		print
-		print "Gauss-Hermite"
+		print()
+		print("Gauss-Hermite")
 		start = time.time()
 		t = FullFactorialNumericalIntegrationHermGauss(f,np.array(mu),order=5)
 		mean,variance,skewness,kurtosis =  t.propagate(Sigma_x,skew=True,kurtosis=True)
-		print time.time()-start
-		print mean, np.sqrt(variance),skewness, kurtosis
+		print(time.time()-start)
+		print(mean, np.sqrt(variance),skewness, kurtosis)
 
 		self.assertAlmostEqual(out.mean(),mean,delta=0.002)
 		self.assertAlmostEqual(out.std(),np.sqrt(variance),delta=0.002)
@@ -1153,7 +1156,7 @@ class TestUncertaintyPropagationSPGP(unittest.TestCase):
 		uph = UncertaintyPropagationNumericalHG(self.gp_est)
 
 		mean, var = uph.propagate_GA(np.array([inputmean]), np.array([[inputvariance]]))
-		print mean, var
+		print(mean, var)
 
 		#Try some values in range [mean,mean+2*std]
 		for i in np.linspace(mean,mean+2*np.sqrt(var),5):
@@ -1172,10 +1175,10 @@ class TestUncertaintyPropagationSPGP(unittest.TestCase):
 
 			t_ga =  scipy.stats.norm.pdf(i, loc=mean, scale=np.sqrt(var))
 
-			print t_n
-			print t_mc
-			print t_h
-			print t_ga
+			print(t_n)
+			print(t_mc)
+			print(t_h)
+			print(t_ga)
 			#Fails
 			#self.assertAlmostEqual(t_n, t_h, delta=t_h/10)
 			self.assertAlmostEqual(t_h, t_mc, delta=t_h*1e-2)
@@ -1200,18 +1203,18 @@ class TestUncertaintyPropagationSPGP(unittest.TestCase):
 		start = time.time()
 		meanE, varianceE = upe.propagate_GA(np.array([inputmean]), np.array([[inputvariance]]))
 		end = time.time()
-		print "Exact ", end - start
+		print("Exact ", end - start)
 
 
 		start = time.time()
 		meanA, varianceA = upa.propagate_GA(np.array([inputmean]), np.array([[inputvariance]]))
 		end = time.time()
-		print "Approx ", end - start
+		print("Approx ", end - start)
 
 
-		print meanE, meanA
-		print (varianceE), (varianceA)
-		print np.sqrt(varianceE), np.sqrt(varianceA)
+		print(meanE, meanA)
+		print((varianceE), (varianceA))
+		print(np.sqrt(varianceE), np.sqrt(varianceA))
 
 		self.assertAlmostEqual(meanE, meanA, delta=1e-2)
 		self.assertAlmostEqual(varianceE, varianceA, delta=1e-2)
@@ -1239,36 +1242,36 @@ class TestUncertaintyPropagationSPGP(unittest.TestCase):
 		start = time.time()
 		meanL, varianceL = upl.propagate_GA(np.array([inputmean]), np.array([[inputvariance]]))
 		end = time.time()
-		print "Linear ", end - start
+		print("Linear ", end - start)
 
 		start = time.time()
 		meanE, varianceE = upe.propagate_GA(np.array([inputmean]), np.array([[inputvariance]]))
 		end = time.time()
-		print "Exact ", end - start
+		print("Exact ", end - start)
 
 		start = time.time()
 		meanN, varianceN = upn.propagate_GA(np.array([inputmean]), np.array([[inputvariance]]))
 		end = time.time()
-		print "Numerical ", end - start
+		print("Numerical ", end - start)
 
 		start = time.time()
 		meanH, varianceH = uph.propagate_GA(np.array([inputmean]), np.array([[inputvariance]]))
 		end = time.time()
-		print "Numerical Herm Gauss", end - start
+		print("Numerical Herm Gauss", end - start)
 
 		start = time.time()
 		meanA, varianceA = upa.propagate_GA(np.array([inputmean]), np.array([[inputvariance]]))
 		end = time.time()
-		print "Approx ", end - start
+		print("Approx ", end - start)
 
 		start = time.time()
 		meanMC, varianceMC = upmc.propagate_GA(np.array([inputmean]), np.array([[inputvariance]]))
 		end = time.time()
-		print "MC ", end - start
+		print("MC ", end - start)
 
-		print meanH, meanN, meanE, meanL, meanA, meanMC
-		print (varianceH), (varianceN), (varianceE), (varianceL), (varianceA), varianceMC
-		print np.sqrt(varianceH),np.sqrt(varianceN), np.sqrt(varianceE), np.sqrt(varianceL), np.sqrt(varianceA), np.sqrt(varianceMC)
+		print(meanH, meanN, meanE, meanL, meanA, meanMC)
+		print((varianceH), (varianceN), (varianceE), (varianceL), (varianceA), varianceMC)
+		print(np.sqrt(varianceH),np.sqrt(varianceN), np.sqrt(varianceE), np.sqrt(varianceL), np.sqrt(varianceA), np.sqrt(varianceMC))
 
 		self.assertAlmostEqual(meanN, meanH, delta=1e-4)
 		self.assertAlmostEqual(meanN, meanL, delta=0.3)
@@ -1302,7 +1305,10 @@ class TestUncertaintyPropagationMETIS(unittest.TestCase):
 
 		# if not os.path.exists('tests/metis_gp.pkl'):
 		with open('tests/metis_data.pkl', 'rb') as output:
-			(collection,x,t) = pickle.load(output)
+			if sys.version_info.major == 3:
+				(collection,x,t) = pickle.load(output, encoding='latin1')
+			else:
+				(collection,x,t) = pickle.load(output)
 		self.gp_est = GaussianProcess(x, t,GaussianCovariance())
 		# 	with open('tests/metis_gp.pkl', 'wb') as output:
 		# 		pickle.dump(self.gp_est, output, protocol=-1)
@@ -1320,15 +1326,17 @@ class TestUncertaintyPropagationMETIS(unittest.TestCase):
 		# Too large to ship the data for testing
 		if os.path.exists('tests/metis_data_mc.pkl'):
 			with open('tests/metis_data_mc.pkl', 'rb') as output:
-				(collection,x,t) = pickle.load(output)
-
+				if sys.version_info.major == 3:
+					(collection,x,t) = pickle.load(output, encoding='latin1')
+				else:
+					(collection,x,t) = pickle.load(output)
 			n = t.size
-			print n
-			print t.mean(), t.std()
+			print(n)
+			print(t.mean(), t.std())
 			#With Fisher info sd:
 			ci_min = t.std()-1.96*t.std()/np.sqrt(n)/np.sqrt(2)
 			ci_max = t.std()+1.96*t.std()/np.sqrt(n)/np.sqrt(2)
-			print ci_min, ci_max
+			print(ci_min, ci_max)
 
 			# With Fisher info variance
 			self.assertAlmostEqual(np.sqrt(t.std()**2-1.96*np.sqrt(2)*t.std()**2/np.sqrt(n)),ci_min,delta=1e-5)
@@ -1341,30 +1349,30 @@ class TestUncertaintyPropagationMETIS(unittest.TestCase):
 			ci_min = 0.0410788036621
 			ci_max = 0.0422334526251
 		meanG,varianceG = self.gp_est(self.mean)
-		print "GP"
-		print meanG, np.sqrt(varianceG)
-		print self.gp_est._get_vt()
+		print("GP")
+		print(meanG, np.sqrt(varianceG))
+		print(self.gp_est._get_vt())
 		code_u = varianceG - self.gp_est._get_vt()
-		print "Code uncertainty: ", np.sqrt(code_u)
+		print("Code uncertainty: ", np.sqrt(code_u))
 		self.assertLess(np.sqrt(code_u),0.0006)
 
 		upe = UncertaintyPropagationExact(self.gp_est)
 		start = time.time()
 		meanE, varianceE = upe.propagate_GA(self.mean, self.Sigma)
-		print "UPE"
-		print time.time()-start
-		print meanE, np.sqrt(varianceE)
-		print np.sqrt(varianceE - code_u)
+		print("UPE")
+		print(time.time()-start)
+		print(meanE, np.sqrt(varianceE))
+		print(np.sqrt(varianceE - code_u))
 		self.assertLess(ci_min, np.sqrt(varianceE - code_u))
 		self.assertLess(np.sqrt(varianceE - code_u),ci_max)
 
 		upa = UncertaintyPropagationApprox(self.gp_est)
 		start = time.time()
 		meanA, varianceA = upa.propagate_GA(self.mean, self.Sigma)
-		print "UPA"
-		print time.time() - start
-		print meanA, np.sqrt(varianceA)
-		print np.sqrt(varianceA - code_u)
+		print("UPA")
+		print(time.time() - start)
+		print(meanA, np.sqrt(varianceA))
+		print(np.sqrt(varianceA - code_u))
 		self.assertLess(ci_min, np.sqrt(varianceA - code_u))
 		self.assertLess(np.sqrt(varianceA - code_u),ci_max)
 
@@ -1391,42 +1399,42 @@ class TestUncertaintyPropagationMETIS(unittest.TestCase):
 		start = time.time()
 		sol_a = iupa.get_best_solution()
 		end = time.time()
-		print "Approx ", end - start
-		print c/I/sol_a
+		print("Approx ", end - start)
+		print(c/I/sol_a)
 		#Testing coestimated
 		self.assertAlmostEqual((c/I/sol_a)[0],(c/I/sol_a)[1],delta=1e-5)
-		print np.sqrt(upa.propagate_GA(u,np.diag(sol_a))[1]-code_u)
-		print np.sqrt(upe.propagate_GA(u,np.diag(sol_a))[1]-code_u)
+		print(np.sqrt(upa.propagate_GA(u,np.diag(sol_a))[1]-code_u))
+		print(np.sqrt(upe.propagate_GA(u,np.diag(sol_a))[1]-code_u))
 		self.assertAlmostEqual(np.sqrt(upa.propagate_GA(u,np.diag(sol_a))[1]-code_u),np.sqrt(upe.propagate_GA(u,np.diag(sol_a))[1]-code_u),delta=1e-5)
 		a_costs =  (np.array([1,0,1])*c/I * 1.0/np.array(sol_a)).sum()
-		print a_costs
+		print(a_costs)
 
 
 
 		start = time.time()
 		sol_n = iupn.get_best_solution()
 		end = time.time()
-		print "Numerical ", end - start
-		print c/I/sol_n
+		print("Numerical ", end - start)
+		print(c/I/sol_n)
 		self.assertAlmostEqual((c/I/sol_n)[0],(c/I/sol_n)[1],delta=1e-5)
-		print np.sqrt(upa.propagate_GA(u,np.diag(sol_n))[1]-code_u)
-		print np.sqrt(upe.propagate_GA(u,np.diag(sol_n))[1]-code_u)
+		print(np.sqrt(upa.propagate_GA(u,np.diag(sol_n))[1]-code_u))
+		print(np.sqrt(upe.propagate_GA(u,np.diag(sol_n))[1]-code_u))
 		self.assertAlmostEqual(np.sqrt(upa.propagate_GA(u,np.diag(sol_n))[1]-code_u),np.sqrt(upe.propagate_GA(u,np.diag(sol_n))[1]-code_u),delta=1e-5)
 		n_costs =  (np.array([1,0,1])*c/I * 1.0/np.array(sol_n)).sum()
-		print n_costs
+		print(n_costs)
 
 
 		start = time.time()
 		sol_ne = iupne.get_best_solution()
 		end = time.time()
-		print "Numerical Exact", end - start
-		print c/I/sol_ne
+		print("Numerical Exact", end - start)
+		print(c/I/sol_ne)
 		self.assertAlmostEqual((c/I/sol_ne)[0],(c/I/sol_ne)[1],delta=1e-5)
-		print np.sqrt(upa.propagate_GA(u,np.diag(sol_ne))[1]-code_u)
-		print np.sqrt(upe.propagate_GA(u,np.diag(sol_ne))[1]-code_u)
+		print(np.sqrt(upa.propagate_GA(u,np.diag(sol_ne))[1]-code_u))
+		print(np.sqrt(upe.propagate_GA(u,np.diag(sol_ne))[1]-code_u))
 		self.assertAlmostEqual(np.sqrt(upa.propagate_GA(u,np.diag(sol_ne))[1]-code_u),np.sqrt(upe.propagate_GA(u,np.diag(sol_ne))[1]-code_u),delta=1e-5)
 		ne_costs =  (np.array([1,0,1])*c/I * 1.0/np.array(sol_ne)).sum()
-		print ne_costs
+		print(ne_costs)
 
 
 		self.assertAlmostEqual(a_costs,n_costs,delta=1e-1)
@@ -1476,7 +1484,7 @@ class TestPeriodicCovariance(unittest.TestCase):
 						self.assertAlmostEqual(Covariance._d_cov_d_theta(cov,xi,xj,self.theta_min,j),cov._d_cov_d_theta(xi,xj,self.theta_min,j),delta=1e-3)
 
 	def test_cov(self):
-		print "Theta_min: ", self.theta_min
+		print("Theta_min: ", self.theta_min)
 		x = np.atleast_2d(np.linspace(0.1, 9.9, 200)).T # upper bound 15 to show prediction
 		gp_est = GaussianProcess(self.x, self.y,PeriodicCovariance())
 		means, variances = gp_est.estimate_many(x)

@@ -9,11 +9,11 @@ import numpy as np
 from scipy.optimize import fmin
 from scipy.misc import derivative
 from scipy.stats import norm
-from Utilities import integrate
+from .Utilities import integrate
 from numpy import Inf
 from math import fabs, log
 
-class MLE:
+class MLE(object):
 
 	def __init__(self, density, theta0, support= None, dims = None, fisher_matrix=None):
 		"""
@@ -35,7 +35,7 @@ class MLE:
 		if support is not None:
 			self.support = support #TODO: Support should be functions of theta
 		else:
-			self.support = [(-Inf,Inf) for i in xrange(dims)]
+			self.support = [(-Inf,Inf) for i in range(dims)]
 
 		self.density = density
 
@@ -167,13 +167,13 @@ class MLE:
 		if observations is not None:
 			n = 1
 			func = self._get_nll_func(observations)
-			for i in xrange(len(theta)):
+			for i in range(len(theta)):
 				#Bring it in a form that we can derive
 				f = lambda ti, t0, tn: func(list(t0) + [ti] + list(tn))
 				l2d.append(derivative(f, theta[i], dx=1e-5, n=2, args=(theta[0:i], theta[i + 1:])))
 		else:
 			#Fisher Information
-			for i in xrange(len(theta)):
+			for i in range(len(theta)):
 				fisher = self.get_fisher_function()
 				result = fisher(theta, i)
 

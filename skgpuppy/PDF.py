@@ -8,7 +8,7 @@
 import numpy as np
 from scipy.stats import norm
 
-class PDF:
+class PDF(object):
 	"""
 	Superclass for normal and skew normal distributions.
 	This class provides methods for plotting and getting quantiles.

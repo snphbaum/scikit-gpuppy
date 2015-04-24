@@ -9,7 +9,10 @@ setup(
 	name = "scikit-gpuppy",
 	version = "0.9.1",
 	packages = find_packages(exclude=['tests']),
-	install_requires = ['scipy>=0.13.3', 'numpy>=1.8.2', 'statsmodels>=0.6.1','nose>=1.3.4','weave'],
+	install_requires = ['scipy>=0.13.3', 'numpy>=1.8.2', 'statsmodels>=0.6.1','nose>=1.3.4'],
+	extras_require = {
+        'speed':  ["weave"]
+    },
 	package_data = {
 		# If any package contains *.txt or *.rst files, include them:
 		'': ['*.txt', '*.rst','*.pkl'],

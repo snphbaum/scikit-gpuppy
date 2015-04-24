@@ -8,7 +8,7 @@
 import numpy as np
 
 
-class GaussianProcess:
+class GaussianProcess(object):
 	"""
 	A Gaussian Process implementation based on Girard's work.
 	(Girard, A. Approximate Methods for Propagation of Uncertainty with Gaussian Process Models University of Glasgow, 2004)
@@ -31,8 +31,6 @@ class GaussianProcess:
 		self.meant= np.mean(t)
 		self.t = t - self.meant
 
-		#Param noise free no longer optional compared to original implementation
-		self.noise_free = False
 
 		self.cov = cov
 		if theta_min is not None:

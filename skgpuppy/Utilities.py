@@ -16,7 +16,7 @@ from numpy.polynomial.hermite import hermgauss
 
 SQRT2PI = sqrt(2*pi)
 
-class cache_wrapper:
+class cache_wrapper(object):
 	"""
 	Wrapper to cache the function values
 	"""
@@ -76,7 +76,7 @@ def _integrate_quad(func, bounds):
 
 	f = lambda *x: func(x)
 
-	for i in xrange(dims - 1):
+	for i in range(dims - 1):
 		f = integrate_1d(f, bounds[i])
 
 	return quad(f, bounds[dims - 1][0], bounds[dims - 1][1], epsabs=0)[0]
@@ -101,7 +101,7 @@ def _integrate_romberg(func, bounds):
 
 	f = lambda *x: func(x)
 
-	for i in xrange(dims - 1):
+	for i in range(dims - 1):
 		f = integrate_1d(f, bounds[i])
 
 	return romberg(f, bounds[dims - 1][0], bounds[dims - 1][1])
@@ -180,7 +180,7 @@ def expected_value_monte_carlo(func,mu,Sigma_x,n=1000):
 	"""
 
 	from numpy.random import multivariate_normal
-	vfunc = lambda x: map(func,x) #np.vectorize(func)
+	vfunc = lambda x: list(map(func,x)) #np.vectorize(func)
 	exp_val = np.mean(vfunc(multivariate_normal(mu,Sigma_x,n)))
 	return exp_val
 
@@ -293,9 +293,9 @@ def minimize(func,theta_start,bounds=None,constr=[],method="all",fprime=None):
 			func_val = funcvals[i]
 			theta_min = thetas[i]
 
-		print name, "\t", times[i], "\t", funcvals[i], "\t", thetas[i]
+		print(name, "\t", times[i], "\t", funcvals[i], "\t", thetas[i])
 
-	print theta_min
+	print(theta_min)
 
 	return theta_min
 

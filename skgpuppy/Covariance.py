@@ -15,7 +15,7 @@ import traceback
 # However cholesky decomposition might be numerically more stable
 
 #TODO!!!: revisit matrix multiplication complexity
-class Dot:
+class Dot(object):
 	"""
 	A class to inspect the matrix multiplication complexity
 	"""
@@ -108,7 +108,7 @@ def tracedot(A,B):
 	#assert np.allclose(np.dot(np.ravel(A.T),np.ravel(B)),np.trace(np.dot(A,B)))
 	return np.dot(np.ravel(A.T),np.ravel(B))
 
-class Covariance:
+class Covariance(object):
 	"""
 	Superclass for all covariance functions
 	"""
@@ -320,7 +320,7 @@ class Covariance:
 		"""
 		d = len(x[0])
 		theta_start = self.get_theta(x,t)
-		print theta_start
+		print(theta_start)
 		func = self._nll_function(x, t)
 		fprime = self._gradient_function(x,t)
 
@@ -331,7 +331,7 @@ class Covariance:
 		bounds = None
 		constr = None
 
-		from Utilities import minimize
+		from .Utilities import minimize
 		theta_min = minimize(func,theta_start,bounds,constr,fprime = fprime, method=["l_bfgs_b"])#["slsqp","l_bfgs_b","simplex"]
 
 		return np.array(theta_min)

@@ -39,7 +39,7 @@ def _setpartition(iterable, n=2):
 	"""
 
 	iterable = list(iterable)
-	partitions = combinations(combinations(iterable, r=n), r=len(iterable) / n)
+	partitions = combinations(combinations(iterable, r=n), r=len(iterable) // n)
 	for partition in partitions:
 		seen = set()
 		for group in partition:
@@ -91,7 +91,7 @@ def _Isserli(powerlist, Sigma_x, diagonal=True):
 	:param Sigma_x: The covariance matrix
 	:return:
 	"""
-	v = range(powerlist.sum())
+	v = list(range(powerlist.sum()))
 	if len(v) % 2 != 0:
 		#Odd order
 		return 0
@@ -125,13 +125,13 @@ def _Isserli(powerlist, Sigma_x, diagonal=True):
 
 
 
-class _ndderivative:
+class _ndderivative(object):
 	"""
 	Class to calculate multidimensional derivatives of arbitrary mixed order.
 	Function calls are being cached for expensive functions.
 	"""
 	def __init__(self,func):
-		class f_class:
+		class f_class(object):
 			"""
 			Wrapper to cache the function values
 			"""
@@ -243,7 +243,7 @@ class TaylorPropagation(PropagateMoments):
 			term /= self._factorials(powerlist)
 			self.termlist.append(term)
 
-		print "Function calls: ", nddev.func.calls
+		print("Function calls: ", nddev.func.calls)
 		# import matplotlib.pyplot as plt
 		# xs = np.array(nddev.func.cache.keys())
 		#

@@ -6,11 +6,11 @@
 
 
 import numpy as np
-from UncertaintyPropagation import UncertaintyPropagationExact, UncertaintyPropagationApprox
-from Utilities import minimize
+from .UncertaintyPropagation import UncertaintyPropagationExact, UncertaintyPropagationApprox
+from .Utilities import minimize
 import time
 
-class InverseUncertaintyPropagation:
+class InverseUncertaintyPropagation(object):
 
 	"""
 	Here, we optimize the cost function :math:`\\sum_i = c_i n_i = \\sum_i \\frac{c_i}{v_i I_{ii}}`
@@ -63,7 +63,7 @@ class InverseUncertaintyPropagationNumerical(InverseUncertaintyPropagation):
 
 		c = self.c
 		I = self.I
-		mapping = np.array(range(len(c)))
+		mapping = np.array(list(range(len(c))))
 		for group in self.coestimated:
 			for i in group:
 				if i != group[0]:
@@ -150,7 +150,7 @@ class InverseUncertaintyPropagationApprox(InverseUncertaintyPropagation):
 
 		upga = self.upga_class(self.gp)
 
-		dvdv = np.array([upga._get_variance_dv_h(self.u,i) for i in xrange(d)])
+		dvdv = np.array([upga._get_variance_dv_h(self.u,i) for i in range(d)])
 		for group in self.coestimated:
 			for i in group:
 				if i != group[0]:
