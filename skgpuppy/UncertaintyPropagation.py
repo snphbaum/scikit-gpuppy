@@ -413,11 +413,11 @@ class UncertaintyPropagationApprox(UncertaintyPropagationGA):
 			}
 			return_val = sum;
 			"""
-			sum = weave.inline(code,['Kinv','C_ux','n'])
+			sum_ = weave.inline(code,['Kinv','C_ux','n'])
 		else:
-			sum = ([Kinv[i][j]*C_ux[i]*C_ux[j] for i in range(n) for j in range(n)])
+			sum_ = sum([Kinv[i][j]*C_ux[i]*C_ux[j] for i in range(n) for j in range(n)])
 
-		sigma2 = self.gp._covariance(u,u) - sum#
+		sigma2 = self.gp._covariance(u,u) - sum_#
 
 
 		return sigma2
@@ -594,7 +594,7 @@ class UncertaintyPropagationApprox(UncertaintyPropagationGA):
 
 			variance2 = weave.inline(code,['Kinv','beta','J','n','h'])
 		else:
-			variance2 =	- sum([(Kinv[i][j]-beta[i]*beta[j]) * self.J_ux[i,h]*self.J_ux[j,h] for i in range(n) for j in range(n)])
+			variance2 =	- sum([(Kinv[i][j]-beta[i]*beta[j]) * self.J_ux[i,h,0]*self.J_ux[j,h,0] for i in range(n) for j in range(n)])
 
 
 

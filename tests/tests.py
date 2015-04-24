@@ -1113,7 +1113,7 @@ class TestTaylor(unittest.TestCase):
 
 
 
-
+#TODO: Test with weaving=False
 class TestUncertaintyPropagationSPGP(unittest.TestCase):
 	def setUp(self):
 		np.random.seed(1234)
