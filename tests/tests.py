@@ -345,7 +345,21 @@ class TestInverseUP(unittest.TestCase):
 		self.assertAlmostEqual(np.sqrt(varianceH), np.sqrt(varianceE), delta=0.05)
 		self.assertAlmostEqual(np.sqrt(varianceN), np.sqrt(varianceH), delta=0.015)
 
+
+
+
 	def test_IUPOpt(self):
+		self.IUPOpt()
+
+	def test_IUPOpt_wo_weaving(self):
+		import skgpuppy.UncertaintyPropagation
+		weaving = skgpuppy.UncertaintyPropagation.weaving
+		skgpuppy.UncertaintyPropagation.weaving = False
+		self.IUPOpt()
+		skgpuppy.UncertaintyPropagation.weaving = weaving
+
+	def IUPOpt(self):
+
 
 		output_variances = 0.2
 		u = np.array([5.0,5.0])
@@ -1113,7 +1127,6 @@ class TestTaylor(unittest.TestCase):
 
 
 
-#TODO: Test with weaving=False
 class TestUncertaintyPropagationSPGP(unittest.TestCase):
 	def setUp(self):
 		np.random.seed(1234)
@@ -1189,6 +1202,15 @@ class TestUncertaintyPropagationSPGP(unittest.TestCase):
 		self.propagate_ga_approx(3, 0.2)
 		self.propagate_ga_approx(8, 0.1)
 
+
+	def test_propagate_ga_approx_wo_weaving(self):
+		import skgpuppy.UncertaintyPropagation
+		weaving = skgpuppy.UncertaintyPropagation.weaving
+		skgpuppy.UncertaintyPropagation.weaving = False
+		self.propagate_ga_approx(5, 0.3)
+		self.propagate_ga_approx(3, 0.2)
+		self.propagate_ga_approx(8, 0.1)
+		skgpuppy.UncertaintyPropagation.weaving = weaving
 
 	def propagate_ga_approx(self, inputmean, inputvariance):
 		upn = UncertaintyPropagationNumerical(self.gp_est)
