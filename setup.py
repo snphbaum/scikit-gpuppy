@@ -7,7 +7,7 @@
 from setuptools import setup, find_packages
 setup(
 	name = "scikit-gpuppy",
-	version = "0.9.1",
+	version = "0.9.2",
 	packages = find_packages(exclude=['tests']),
 	install_requires = ['scipy>=0.13.3', 'numpy>=1.8.2', 'statsmodels>=0.6.1','nose>=1.3.4'],
 	extras_require = {
