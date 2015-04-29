@@ -23,7 +23,7 @@ if USE_CYTHON:
 setup(
 	name = "scikit-gpuppy",
 	version = "0.9.2",
-	packages = find_packages(exclude=['tests']),
+	packages = find_packages(),
 	install_requires = ['scipy>=0.13.3', 'numpy>=1.8.2', 'statsmodels>=0.6.1','nose>=1.3.4'],
 	extras_require = {
         'speed':  ["weave"]

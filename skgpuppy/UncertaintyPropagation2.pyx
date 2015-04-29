@@ -1,4 +1,3 @@
-#!python
 #cython: boundscheck=False
 
 # Copyright (C) 2015 Philipp Baumgaertel
@@ -16,6 +15,8 @@ from libc.math cimport exp
 
 DTYPE = np.float64
 ctypedef np.float64_t DTYPE_t
+
+#TODO: complete types
 
 cdef class UncertaintyPropagationGA:
 	"""

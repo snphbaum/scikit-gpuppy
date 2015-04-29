@@ -1324,11 +1324,15 @@ class TestUncertaintyPropagationMETIS(unittest.TestCase):
 	def setUp(self):
 
 		# if not os.path.exists('tests/metis_gp.pkl'):
-		with open('tests/metis_data.pkl', 'rb') as output:
-			if sys.version_info.major == 3:
-				(collection,x,t) = pickle.load(output, encoding='latin1')
-			else:
-				(collection,x,t) = pickle.load(output)
+		if os.path.exists('skgpuppy/tests/metis_data_mc.pkl'):
+			with open('skgpuppy/tests/metis_data.pkl', 'rb') as output:
+				if sys.version_info.major == 3:
+					(collection,x,t) = pickle.load(output, encoding='latin1')
+				else:
+					(collection,x,t) = pickle.load(output)
+		else:
+			raise RuntimeError("Test data not found!")
+
 		self.gp_est = GaussianProcess(x, t,GaussianCovariance())
 		# 	with open('tests/metis_gp.pkl', 'wb') as output:
 		# 		pickle.dump(self.gp_est, output, protocol=-1)
@@ -1348,8 +1352,8 @@ class TestUncertaintyPropagationMETIS(unittest.TestCase):
 		#from skgpuppy.UncertaintyPropagation2 import UncertaintyPropagationApprox, UncertaintyPropagationExact
 
 		# Too large to ship the data for testing
-		if os.path.exists('tests/metis_data_mc.pkl'):
-			with open('tests/metis_data_mc.pkl', 'rb') as output:
+		if os.path.exists('skgpuppy/tests/metis_data_mc.pkl'):
+			with open('skgpuppy/tests/metis_data_mc.pkl', 'rb') as output:
 				if sys.version_info.major == 3:
 					(collection,x,t) = pickle.load(output, encoding='latin1')
 				else:
