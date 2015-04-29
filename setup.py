@@ -4,7 +4,22 @@
 # This software may be modified and distributed under the terms
 # of the BSD license.  See the LICENSE.txt file for details.
 
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, Extension
+
+try:
+	from Cython.Build import cythonize
+	USE_CYTHON = True
+except ImportError:
+	USE_CYTHON = False
+
+ext = '.pyx' if USE_CYTHON else '.c'
+
+extensions = [Extension("skgpuppy/UncertaintyPropagation2", ["skgpuppy/UncertaintyPropagation2"+ext])]
+
+if USE_CYTHON:
+	extensions = cythonize(extensions,compiler_directives={'boundscheck': False})
+
+
 setup(
 	name = "scikit-gpuppy",
 	version = "0.9.2",
@@ -17,6 +32,7 @@ setup(
 		# If any package contains *.txt or *.rst files, include them:
 		'': ['*.txt', '*.rst','*.pkl'],
     },
+	ext_modules = extensions,
 	author = "Philipp Baumgaertel",
 	author_email = "philipp.baumgaertel@fau.de",
 	description = "Gaussian Process Uncertainty Propagation with PYthon",

@@ -1344,6 +1344,10 @@ class TestUncertaintyPropagationMETIS(unittest.TestCase):
 		self.Sigma = np.diag([2**2,1**2,0.005**2])
 
 	def test_propagation(self):
+		#import skgpuppy.UncertaintyPropagation
+		#skgpuppy.UncertaintyPropagation.weaving = False
+
+		from skgpuppy.UncertaintyPropagation2 import UncertaintyPropagationApprox, UncertaintyPropagationExact
 
 		# Too large to ship the data for testing
 		if os.path.exists('tests/metis_data_mc.pkl'):
@@ -1462,9 +1466,6 @@ class TestUncertaintyPropagationMETIS(unittest.TestCase):
 		self.assertAlmostEqual(a_costs,n_costs,delta=1e-1)
 		self.assertAlmostEqual(a_costs,ne_costs,delta=5e2)
 
-	def test_FFNI(self):
-		#TODO Copy code
-		pass
 
 
 #TODO: Use the MM1 sim as a Testcase
