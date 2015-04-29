@@ -257,7 +257,7 @@ class TestInverseUP(unittest.TestCase):
 		# if not os.path.exists('tests/gp_2d.pkl'):
 			#Because it takes too long: pickle a gp
 
-		x = np.array([[x1,x2] for x1 in range(10) for x2 in range(10)])  #np.atleast_2d(np.linspace(0, 10, 30)).T
+		x = np.array([[x1,x2] for x1 in range(10) for x2 in range(10)],dtype=np.float64)  #np.atleast_2d(np.linspace(0, 10, 30)).T
 		w = np.array([0.04,0.04])
 		v = 2
 		vt = 0#.01
@@ -1159,9 +1159,9 @@ class TestUncertaintyPropagationSPGP(unittest.TestCase):
 #		plt.show()
 
 	def test_propagate(self):
-		self.propagate(5, 1e-3)
-		self.propagate(3, 1e-3)
-		self.propagate(8, 1e-3)
+		self.propagate(5.0, 1e-3)
+		self.propagate(3.0, 1e-3)
+		self.propagate(8.0, 1e-3)
 
 	def propagate(self,inputmean,inputvariance):
 		upmc = UncertaintyPropagationMC(self.gp_est,10000)
@@ -1198,18 +1198,18 @@ class TestUncertaintyPropagationSPGP(unittest.TestCase):
 			self.assertAlmostEqual(t_h, t_ga, delta=t_h*1e-4)
 
 	def test_propagate_ga_approx(self):
-		self.propagate_ga_approx(5, 0.3)
-		self.propagate_ga_approx(3, 0.2)
-		self.propagate_ga_approx(8, 0.1)
+		self.propagate_ga_approx(5.0, 0.3)
+		self.propagate_ga_approx(3.0, 0.2)
+		self.propagate_ga_approx(8.0, 0.1)
 
 
 	def test_propagate_ga_approx_wo_weaving(self):
 		import skgpuppy.UncertaintyPropagation
 		weaving = skgpuppy.UncertaintyPropagation.weaving
 		skgpuppy.UncertaintyPropagation.weaving = False
-		self.propagate_ga_approx(5, 0.3)
-		self.propagate_ga_approx(3, 0.2)
-		self.propagate_ga_approx(8, 0.1)
+		self.propagate_ga_approx(5.0, 0.3)
+		self.propagate_ga_approx(3.0, 0.2)
+		self.propagate_ga_approx(8.0, 0.1)
 		skgpuppy.UncertaintyPropagation.weaving = weaving
 
 	def propagate_ga_approx(self, inputmean, inputvariance):
@@ -1243,9 +1243,9 @@ class TestUncertaintyPropagationSPGP(unittest.TestCase):
 
 
 	def test_propagate_ga(self):
-		self.propagate_ga(5, 1)
-		self.propagate_ga(3, 2)
-		self.propagate_ga(8, 1)
+		self.propagate_ga(5.0, 1.0)
+		self.propagate_ga(3.0, 2.0)
+		self.propagate_ga(8.0, 1.0)
 
 
 	def propagate_ga(self, inputmean, inputvariance):
@@ -1308,16 +1308,14 @@ class TestUncertaintyPropagationSPGP(unittest.TestCase):
 		self.assertAlmostEqual(np.sqrt(varianceE), np.sqrt(varianceL), delta=np.sqrt(max(varianceL, varianceE)) * 1)
 
 	def test_jacobian(self):
-		upa = UncertaintyPropagationApprox(self.gp_est)
-		jacobian = upa.gp._get_Jacobian(np.array([5]),np.array([4]))
+		jacobian = self.gp_est._get_Jacobian(np.array([5]),np.array([4]))
 
 		est =  (self.gp_est._covariance(np.array([5]),np.array([4.1]))-self.gp_est._covariance(np.array([5]),np.array([3.9])))/0.2
 
 		self.assertAlmostEqual(jacobian[0][0],est,delta=1e-2)
 
 	def test_hessian(self):
-		upa = UncertaintyPropagationApprox(self.gp_est)
-		hessian = upa.gp._get_Hessian(np.array([5]),np.array([4]))
+		hessian = self.gp_est._get_Hessian(np.array([5]),np.array([4]))
 		est = (self.gp_est._covariance(np.array([5]),np.array([4.1])) - 2 * self.gp_est._covariance(np.array([5]),np.array([4.0]))+self.gp_est._covariance(np.array([5]),np.array([3.9])))/0.01
 		self.assertAlmostEqual(hessian[0][0],est,delta=1e-2)
 
@@ -1347,7 +1345,7 @@ class TestUncertaintyPropagationMETIS(unittest.TestCase):
 		#import skgpuppy.UncertaintyPropagation
 		#skgpuppy.UncertaintyPropagation.weaving = False
 
-		from skgpuppy.UncertaintyPropagation2 import UncertaintyPropagationApprox, UncertaintyPropagationExact
+		#from skgpuppy.UncertaintyPropagation2 import UncertaintyPropagationApprox, UncertaintyPropagationExact
 
 		# Too large to ship the data for testing
 		if os.path.exists('tests/metis_data_mc.pkl'):

@@ -48,11 +48,12 @@ grafiken/roh/*.pdf
 !/.gitignore
 *.backup
 *Thumbs.db*
+*.so
 
 dist
 cover
 build
 scikit_gpuppy.egg-info
 skgpuppy/UncertaintyPropagation2.html
-skgpuppy/UncertaintyPropagation2.so
+
 

@@ -12,6 +12,7 @@ import numpy as np
 cimport numpy as np
 from skgpuppy.Covariance import tracedot
 from numpy.linalg import inv, det
+from libc.math cimport exp
 
 DTYPE = np.float64
 ctypedef np.float64_t DTYPE_t
@@ -145,38 +146,37 @@ cdef class UncertaintyPropagationExact(UncertaintyPropagationGA):
 		return self.normalize_C_corr2 * np.exp(0.5 * (np.dot(diff.T, np.dot(self.LambdaInv, diff))))
 
 	cpdef tuple propagate_GA(self,np.ndarray[DTYPE_t,ndim=1] u,np.ndarray[DTYPE_t,ndim=2] Sigma_x):
-		beta = self.gp._get_beta()
-		x = self.gp.x
+		cdef np.ndarray[DTYPE_t,ndim=1] beta = self.gp._get_beta()
+		cdef np.ndarray[DTYPE_t,ndim=2] x = self.gp.x
 		self.Winv = self.gp._get_W_inv()
 		self.Sigma_x = Sigma_x
-		Kinv = self.gp._inv_cov_matrix()
-		#Kinv = inv(self.gp.cov_matrix())
-		N,d = x.shape
+		cdef np.ndarray[DTYPE_t,ndim=2] Kinv = self.gp._inv_cov_matrix()
+		cdef unsigned int N = x.shape[0]
+		cdef unsigned int d = x.shape[1]
 		assert(N == len(beta))
-
+		cdef unsigned int i,j,i2,j2
 
 		self._prepare_C_corr2(len(u))
 
-		C_ux = []
+		cdef list C_ux_ = []
 		for i in range(N):
-			C_ux.append(self.gp._covariance(u,x[i]))
-		C_ux = np.array(C_ux)
+			C_ux_.append(self.gp._covariance(u,x[i]))
+		cdef np.ndarray[DTYPE_t,ndim=1] C_ux = np.array(C_ux_)
 		self.C_ux = C_ux
 		mu = self.propagate_mean(u, Sigma_x)
 
-
-
-			# Old Version
-		sum = 0.0
+		cdef double nc = self.normalize_C_corr2
+		cdef np.ndarray[DTYPE_t,ndim=2] L = self.LambdaInv
+		cdef double sum = 0.0
+		cdef double dot = 0.0
 		for i in range(N):
 			for j in range(N):
-				x_ = (x[i] + x[j]) / 2.0
+				dot = 0.0
+				for i2 in range(d):
+					for j2 in range(d):	
+						dot += (u[i2]-(x[i,i2]+x[j,i2])/2.0) * (u[j2]-(x[i,j2]+x[j,j2])/2.0) *L[i2,j2]
+				sum += (Kinv[i,j] - beta[i] * beta[j]) * C_ux[i]*C_ux[j] * nc * exp(0.5 * dot)
 
-				l_ij = C_ux[i] * \
-					   C_ux[j] * \
-					   self._get_C_corr2(u, x_)
-
-				sum += (Kinv[i][j] - beta[i] * beta[j]) * l_ij
 
 		variance = self.gp._covariance(u, u) - sum - mu ** 2
 
@@ -235,7 +235,7 @@ cdef class UncertaintyPropagationApprox(UncertaintyPropagationGA):
 		cdef int d = x.shape[1]
 		cdef unsigned int i,j,k
 		cdef double trace_ = 0.0
-		cdef np.ndarray[DTYPE_t,ndim=2] S = np.atleast_2d(np.diag(Sigma_x)).T
+		cdef np.ndarray[DTYPE_t,ndim=2] S = np.atleast_2d(np.diag(Sigma_x).copy()).T
 		cdef double sum_ = 0.0
 		for i in range(n):
 			for j in range(n):
@@ -336,13 +336,12 @@ cdef class UncertaintyPropagationApprox(UncertaintyPropagationGA):
 
 
 
-	cpdef double _get_variance_dv_h(self,u,h):
-		beta = self.gp._get_beta()
-		Kinv = self.gp._inv_cov_matrix()
-		x = self.gp.x
-		n,d = x.shape
-
-
+	cpdef double _get_variance_dv_h(self,np.ndarray[DTYPE_t,ndim=1] u,unsigned int h):
+		cdef np.ndarray[DTYPE_t,ndim=1] beta = self.gp._get_beta()
+		cdef np.ndarray[DTYPE_t,ndim=2] Kinv = self.gp._inv_cov_matrix()
+		cdef np.ndarray[DTYPE_t,ndim=2] x = self.gp.x
+		cdef unsigned int n = x.shape[0]
+		cdef unsigned int d = x.shape[1]
 
 		#We store the values because we can reuse them
 		if self.u is None or (self.u != u).any():
@@ -359,17 +358,23 @@ cdef class UncertaintyPropagationApprox(UncertaintyPropagationGA):
 			self.J_ux = np.array(self.J_ux)
 			self.H_ux = np.array(self.H_ux)
 
+		cdef np.ndarray[DTYPE_t,ndim=1] C_ux = self.C_ux
+		cdef np.ndarray[DTYPE_t,ndim=3] H_ux = self.H_ux
+		cdef np.ndarray[DTYPE_t,ndim=3] J_ux = self.J_ux
+
+		cdef double sum_ = 0.0
+		for i in range(n):
+			for j in range(n):
+				sum_ += (Kinv[i,j]-beta[i]*beta[j]) * J_ux[i,h,0]*J_ux[j,h,0]
+		variance2 = - sum_ #sum([(Kinv[i,j]-beta[i]*beta[j]) * self.J_ux[i,h,0]*self.J_ux[j,h,0] for i in range(n) for j in range(n)])
 
 
-
-		variance2 = - sum([(Kinv[i][j]-beta[i]*beta[j]) * self.J_ux[i,h,0]*self.J_ux[j,h,0] for i in range(n) for j in range(n)])
-
-
-
-		C_ux = self.C_ux
-		H_ux = self.H_ux
-
-		variance3 = - 0.5* sum([Kinv[i][j]*(C_ux[i]*H_ux[j,h,h] +C_ux[j]*H_ux[i,h,h]) for i in range(n) for j in range(n)])
+		sum_ = 0.0
+		for i in range(n):
+			for j in range(n):
+				sum_ += Kinv[i,j]*(C_ux[i]*H_ux[j,h,h] +C_ux[j]*H_ux[i,h,h])
+		variance3 = - 0.5* sum_ #sum([Kinv[i,j]*(C_ux[i]*H_ux[j,h,h] +C_ux[j]*H_ux[i,h,h]) for i in range(n) for j in range(n)])
 
 
 		return variance2+variance3
+
