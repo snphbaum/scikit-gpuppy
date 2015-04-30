@@ -1324,14 +1324,16 @@ class TestUncertaintyPropagationMETIS(unittest.TestCase):
 	def setUp(self):
 
 		# if not os.path.exists('tests/metis_gp.pkl'):
-		if os.path.exists('skgpuppy/tests/metis_data_mc.pkl'):
-			with open('skgpuppy/tests/metis_data.pkl', 'rb') as output:
-				if sys.version_info.major == 3:
-					(collection,x,t) = pickle.load(output, encoding='latin1')
-				else:
-					(collection,x,t) = pickle.load(output)
-		else:
-			raise RuntimeError("Test data not found!")
+		# if os.path.exists('skgpuppy/tests/metis_data.pkl'):
+		# 	with open('skgpuppy/tests/metis_data.pkl', 'rb') as output:
+		# 		if sys.version_info.major == 3:
+		# 			(collection,x,t) = pickle.load(output, encoding='latin1')
+		# 		else:
+		# 			(collection,x,t) = pickle.load(output)
+		# else:
+		# 	raise RuntimeError("Test data not found!")
+
+		from skgpuppy.tests.metis_data import x,t
 
 		self.gp_est = GaussianProcess(x, t,GaussianCovariance())
 		# 	with open('tests/metis_gp.pkl', 'wb') as output:
@@ -1352,30 +1354,32 @@ class TestUncertaintyPropagationMETIS(unittest.TestCase):
 		#from skgpuppy.UncertaintyPropagation2 import UncertaintyPropagationApprox, UncertaintyPropagationExact
 
 		# Too large to ship the data for testing
-		if os.path.exists('skgpuppy/tests/metis_data_mc.pkl'):
-			with open('skgpuppy/tests/metis_data_mc.pkl', 'rb') as output:
-				if sys.version_info.major == 3:
-					(collection,x,t) = pickle.load(output, encoding='latin1')
-				else:
-					(collection,x,t) = pickle.load(output)
-			n = t.size
-			print(n)
-			print(t.mean(), t.std())
-			#With Fisher info sd:
-			ci_min = t.std()-1.96*t.std()/np.sqrt(n)/np.sqrt(2)
-			ci_max = t.std()+1.96*t.std()/np.sqrt(n)/np.sqrt(2)
-			print(ci_min, ci_max)
 
-			# With Fisher info variance
-			self.assertAlmostEqual(np.sqrt(t.std()**2-1.96*np.sqrt(2)*t.std()**2/np.sqrt(n)),ci_min,delta=1e-5)
-			self.assertAlmostEqual(np.sqrt(t.std()**2+1.96*np.sqrt(2)*t.std()**2/np.sqrt(n)),ci_max,delta=1e-5)
+		# if os.path.exists('skgpuppy/tests/metis_data_mc.pkl'):
+		# 	with open('skgpuppy/tests/metis_data_mc.pkl', 'rb') as output:
+		# 		if sys.version_info.major == 3:
+		# 			(collection,x,t) = pickle.load(output, encoding='latin1')
+		# 		else:
+		# 			(collection,x,t) = pickle.load(output)
+		# 	n = t.size
+		# 	print(n)
+		# 	print(t.mean(), t.std())
+		# 	#With Fisher info sd:
+		# 	ci_min = t.std()-1.96*t.std()/np.sqrt(n)/np.sqrt(2)
+		# 	ci_max = t.std()+1.96*t.std()/np.sqrt(n)/np.sqrt(2)
+		# 	print(ci_min, ci_max)
+		#
+		# 	# With Fisher info variance
+		# 	self.assertAlmostEqual(np.sqrt(t.std()**2-1.96*np.sqrt(2)*t.std()**2/np.sqrt(n)),ci_min,delta=1e-5)
+		# 	self.assertAlmostEqual(np.sqrt(t.std()**2+1.96*np.sqrt(2)*t.std()**2/np.sqrt(n)),ci_max,delta=1e-5)
 
 			# with chi squared distribution:
 			#print  np.sqrt((n-1)*t.std()**2 / chi2.ppf(1-0.05/2,n-1)), np.sqrt((n-1)*t.std()**2 / chi2.ppf(0.05/2,n-1))
 
-		else:
-			ci_min = 0.0410788036621
-			ci_max = 0.0422334526251
+		#else:
+
+		ci_min = 0.0410788036621
+		ci_max = 0.0422334526251
 		meanG,varianceG = self.gp_est(self.mean)
 		print("GP")
 		print(meanG, np.sqrt(varianceG))

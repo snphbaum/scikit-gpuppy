@@ -26,11 +26,12 @@ setup(
 	packages = find_packages(),
 	install_requires = ['scipy>=0.13.3', 'numpy>=1.8.2', 'statsmodels>=0.6.1','nose>=1.3.4'],
 	extras_require = {
-        'speed':  ["weave"]
+        'speed':  ["weave"],
+        'speed alternative':  ["Cython>=0.20"]
     },
 	package_data = {
 		# If any package contains *.txt or *.rst files, include them:
-		'': ['*.txt', '*.rst','*.pkl'],
+		'': ['*.txt', '*.rst'],
     },
 	ext_modules = extensions,
 	author = "Philipp Baumgaertel",
