@@ -22,7 +22,7 @@ if USE_CYTHON:
 
 setup(
 	name = "scikit-gpuppy",
-	version = "0.9.2",
+	version = "0.9.3",
 	packages = find_packages(),
 	install_requires = ['scipy>=0.13.3', 'numpy>=1.8.2', 'statsmodels>=0.6.1','nose>=1.3.4'],
 	extras_require = {
@@ -31,7 +31,7 @@ setup(
     },
 	package_data = {
 		# If any package contains *.txt or *.rst files, include them:
-		'': ['*.txt', '*.rst'],
+		'': ['*.txt', '*.rst','*.pyx'],
     },
 	ext_modules = extensions,
 	author = "Philipp Baumgaertel",

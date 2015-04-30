@@ -10,6 +10,10 @@ Requirements
 * statsmodels
 * nose
 
+Optional:
+
+* weave or Cython for performance
+
 Usage
 -----
 

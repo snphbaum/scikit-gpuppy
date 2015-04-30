@@ -52,13 +52,12 @@ Requirements
 
 * scipy
 * numpy
-* weave
 * statsmodels
 * nose
 
-Testing
--------
-``python setup.py test``
+Optional:
+
+* weave or Cython for performance
 
 Documentation
 -------------
@@ -72,6 +71,18 @@ or
 Installation
 ------------
 ``pip install scikit-gpuppy``
+
+or
+
+``python setup.py install``
+
+
+Testing
+-------
+
+After Installation:
+
+``nosetests skgpuppy``
 
 Usage
 -----
