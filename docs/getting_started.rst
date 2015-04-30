@@ -14,6 +14,22 @@ Optional:
 
 * weave or Cython for performance
 
+Installation
+------------
+``pip install scikit-gpuppy``
+
+or
+
+``python setup.py install``
+
+
+Testing
+-------
+
+After Installation:
+
+``nosetests skgpuppy``
+
 Usage
 -----
 
