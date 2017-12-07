@@ -5,6 +5,7 @@
 # of the BSD license.  See the LICENSE.txt file for details.
 
 from setuptools import setup, find_packages, Extension
+import numpy
 
 try:
 	from Cython.Build import cythonize
@@ -14,7 +15,7 @@ except ImportError:
 
 ext = '.pyx' if USE_CYTHON else '.c'
 
-extensions = [Extension("skgpuppy/UncertaintyPropagation2", ["skgpuppy/UncertaintyPropagation2"+ext])]
+extensions = [Extension("skgpuppy.UncertaintyPropagation2", ["skgpuppy/UncertaintyPropagation2"+ext], include_dirs=[numpy.get_include()])]
 
 if USE_CYTHON:
 	extensions = cythonize(extensions,compiler_directives={'boundscheck': False})
