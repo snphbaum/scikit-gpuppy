@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fsnphbaum%2Fscikit-gpuppy.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fsnphbaum%2Fscikit-gpuppy?ref=badge_shield)
+
 ===================================================================
 scikit-GPUPPY: Gaussian Process Uncertainty Propagation with PYthon
 ===================================================================
@@ -186,3 +188,7 @@ Usage
 
 
 
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fsnphbaum%2Fscikit-gpuppy.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fsnphbaum%2Fscikit-gpuppy?ref=badge_large)
